@@ -1,0 +1,116 @@
+{
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [100, 100],
+      "size": {"0": 315, "1": 314},
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [1], "shape": 3, "slot_index": 0},
+        {"name": "MASK", "type": "MASK", "links": null, "shape": 3}
+      ],
+      "properties": {"Node name for S&R": "LoadImage"},
+      "widgets_values": ["face_photo.jpg", "image"]
+    },
+    {
+      "id": 2,
+      "type": "Pixel3DMMLoader",
+      "pos": [100, 450],
+      "size": {"0": 315, "1": 200},
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {"name": "model", "type": "PIXEL3DMM_MODEL", "links": [2], "shape": 3, "slot_index": 0},
+        {"name": "status", "type": "STRING", "links": null, "shape": 3}
+      ],
+      "properties": {"Node name for S&R": "Pixel3DMMLoader"},
+      "widgets_values": [
+        "models/pixel3dmm/pixel3dmm_model.pth",
+        "auto",
+        "fp32",
+        "{}"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "FaceReconstructor3D",
+      "pos": [500, 100],
+      "size": {"0": 315, "1": 300},
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {"name": "model", "type": "PIXEL3DMM_MODEL", "link": 2},
+        {"name": "image", "type": "IMAGE", "link": 1}
+      ],
+      "outputs": [
+        {"name": "rendered_face", "type": "IMAGE", "links": [3], "shape": 3, "slot_index": 0},
+        {"name": "flame_parameters", "type": "FLAME_PARAMS", "links": [4], "shape": 3},
+        {"name": "mesh_data", "type": "MESH_DATA", "links": [5], "shape": 3},
+        {"name": "status", "type": "STRING", "links": null, "shape": 3}
+      ],
+      "properties": {"Node name for S&R": "FaceReconstructor3D"},
+      "widgets_values": [
+        "balanced",
+        true,
+        100,
+        0.01
+      ]
+    },
+    {
+      "id": 4,
+      "type": "PreviewImage",
+      "pos": [900, 100],
+      "size": {"0": 315, "1": 246},
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 3}
+      ],
+      "properties": {"Node name for S&R": "PreviewImage"}
+    },
+    {
+      "id": 5,
+      "type": "MeshExporter",
+      "pos": [900, 400],
+      "size": {"0": 315, "1": 250},
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {"name": "mesh_data", "type": "MESH_DATA", "link": 5}
+      ],
+      "outputs": [
+        {"name": "file_path", "type": "STRING", "links": null, "shape": 3},
+        {"name": "status", "type": "STRING", "links": null, "shape": 3}
+      ],
+      "properties": {"Node name for S&R": "MeshExporter"},
+      "widgets_values": [
+        "obj",
+        "face_reconstruction",
+        "output/meshes",
+        false,
+        1.0,
+        true
+      ]
+    }
+  ],
+  "links": [
+    [1, 1, 0, 3, 1, "IMAGE"],
+    [2, 2, 0, 3, 0, "PIXEL3DMM_MODEL"],
+    [3, 3, 0, 4, 0, "IMAGE"],
+    [4, 3, 1, null, null, "FLAME_PARAMS"],
+    [5, 3, 2, 5, 0, "MESH_DATA"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}

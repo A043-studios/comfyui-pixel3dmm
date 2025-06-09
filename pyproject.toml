@@ -1,0 +1,157 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comfyui-pixel3dmm"
+version = "1.0.0"
+description = "Professional 3D face reconstruction for ComfyUI using the Pixel3DMM method"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "MCP Multi-Agent System", email = "contact@example.com"}
+]
+maintainers = [
+    {name = "MCP Multi-Agent System", email = "contact@example.com"}
+]
+keywords = [
+    "comfyui",
+    "3d-reconstruction",
+    "face-modeling",
+    "flame",
+    "computer-vision",
+    "deep-learning",
+    "pytorch"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "numpy>=1.21.0",
+    "pillow>=8.3.0",
+    "opencv-python>=4.5.0",
+    "scipy>=1.7.0",
+    "scikit-image>=0.18.0",
+    "einops>=0.4.0",
+    "trimesh>=3.15.0",
+    "omegaconf>=2.1.0",
+    "tyro>=0.5.0",
+    "environs>=9.0.0",
+    "mediapy>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0.0",
+    "pytest-cov>=3.0.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+    "mypy>=0.950",
+    "pre-commit>=2.20.0",
+]
+advanced = [
+    "timm>=0.6.0",
+    "pytorch3d>=0.7.0",
+    "pyvista>=0.37.0",
+    "dreifus>=0.1.0",
+]
+all = [
+    "comfyui-pixel3dmm[dev,advanced]"
+]
+
+[project.urls]
+Homepage = "https://github.com/your-repo/comfyui-pixel3dmm"
+Documentation = "https://github.com/your-repo/comfyui-pixel3dmm/wiki"
+Repository = "https://github.com/your-repo/comfyui-pixel3dmm.git"
+Issues = "https://github.com/your-repo/comfyui-pixel3dmm/issues"
+Changelog = "https://github.com/your-repo/comfyui-pixel3dmm/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+packages = ["comfyui_pixel3dmm"]
+
+[tool.setuptools.package-dir]
+comfyui_pixel3dmm = "."
+
+[tool.black]
+line-length = 100
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--cov=comfyui_pixel3dmm",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+
+[tool.coverage.run]
+source = ["comfyui_pixel3dmm"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "setup.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]

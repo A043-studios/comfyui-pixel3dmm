@@ -1,0 +1,212 @@
+{
+  "last_node_id": 10,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [50, 50],
+      "size": {"0": 315, "1": 314},
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [1, 2, 3], "shape": 3, "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "LoadImage"},
+      "widgets_values": ["high_quality_face.jpg", "image"]
+    },
+    {
+      "id": 2,
+      "type": "Pixel3DMMLoader",
+      "pos": [50, 400],
+      "size": {"0": 315, "1": 200},
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {"name": "model", "type": "PIXEL3DMM_MODEL", "links": [4, 5, 6, 7], "shape": 3, "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "Pixel3DMMLoader"},
+      "widgets_values": [
+        "models/pixel3dmm/pixel3dmm_model.pth",
+        "auto",
+        "fp32",
+        "{\"optimization\": {\"max_steps\": 200}}"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "FaceReconstructor3D",
+      "pos": [400, 50],
+      "size": {"0": 315, "1": 300},
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {"name": "model", "type": "PIXEL3DMM_MODEL", "link": 4},
+        {"name": "image", "type": "IMAGE", "link": 1}
+      ],
+      "outputs": [
+        {"name": "rendered_face", "type": "IMAGE", "links": [8], "shape": 3},
+        {"name": "flame_parameters", "type": "FLAME_PARAMS", "links": [9], "shape": 3, "slot_index": 1},
+        {"name": "mesh_data", "type": "MESH_DATA", "links": null, "shape": 3}
+      ],
+      "properties": {"Node name for S&R": "FaceReconstructor3D"},
+      "widgets_values": [
+        "high",
+        false,
+        50,
+        0.005
+      ]
+    },
+    {
+      "id": 4,
+      "type": "UVPredictor",
+      "pos": [400, 400],
+      "size": {"0": 315, "1": 200},
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {"name": "model", "type": "PIXEL3DMM_MODEL", "link": 5},
+        {"name": "image", "type": "IMAGE", "link": 2}
+      ],
+      "outputs": [
+        {"name": "uv_map", "type": "IMAGE", "links": null, "shape": 3},
+        {"name": "uv_coordinates", "type": "UV_COORDS", "links": [10], "shape": 3, "slot_index": 1}
+      ],
+      "properties": {"Node name for S&R": "UVPredictor"},
+      "widgets_values": [
+        "512",
+        0.1,
+        0.7
+      ]
+    },
+    {
+      "id": 5,
+      "type": "NormalPredictor",
+      "pos": [400, 650],
+      "size": {"0": 315, "1": 200},
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {"name": "model", "type": "PIXEL3DMM_MODEL", "link": 6},
+        {"name": "image", "type": "IMAGE", "link": 3}
+      ],
+      "outputs": [
+        {"name": "normal_map", "type": "IMAGE", "links": null, "shape": 3},
+        {"name": "normal_vectors", "type": "NORMALS", "links": [11], "shape": 3, "slot_index": 1}
+      ],
+      "properties": {"Node name for S&R": "NormalPredictor"},
+      "widgets_values": [
+        "512",
+        "camera",
+        0.05,
+        true
+      ]
+    },
+    {
+      "id": 6,
+      "type": "FLAMEOptimizer",
+      "pos": [750, 300],
+      "size": {"0": 315, "1": 350},
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {"name": "model", "type": "PIXEL3DMM_MODEL", "link": 7},
+        {"name": "image", "type": "IMAGE", "link": null},
+        {"name": "initial_params", "type": "FLAME_PARAMS", "link": 9},
+        {"name": "uv_coordinates", "type": "UV_COORDS", "link": 10},
+        {"name": "surface_normals", "type": "NORMALS", "link": 11}
+      ],
+      "outputs": [
+        {"name": "optimized_params", "type": "FLAME_PARAMS", "links": null, "shape": 3},
+        {"name": "mesh_data", "type": "MESH_DATA", "links": [12], "shape": 3, "slot_index": 1},
+        {"name": "status", "type": "STRING", "links": null, "shape": 3}
+      ],
+      "properties": {"Node name for S&R": "FLAMEOptimizer"},
+      "widgets_values": [
+        200,
+        0.005,
+        1.0,
+        1.0,
+        0.01
+      ]
+    },
+    {
+      "id": 7,
+      "type": "PreviewImage",
+      "pos": [1100, 50],
+      "size": {"0": 315, "1": 246},
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 8}
+      ],
+      "properties": {"Node name for S&R": "PreviewImage"}
+    },
+    {
+      "id": 8,
+      "type": "MeshExporter",
+      "pos": [1100, 350],
+      "size": {"0": 315, "1": 300},
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {"name": "mesh_data", "type": "MESH_DATA", "link": 12}
+      ],
+      "outputs": [
+        {"name": "file_path", "type": "STRING", "links": null, "shape": 3},
+        {"name": "status", "type": "STRING", "links": null, "shape": 3}
+      ],
+      "properties": {"Node name for S&R": "MeshExporter"},
+      "widgets_values": [
+        "obj",
+        "optimized_face_3d",
+        "output/meshes",
+        true,
+        1.0,
+        true
+      ]
+    }
+  ],
+  "links": [
+    [1, 1, 0, 3, 1, "IMAGE"],
+    [2, 1, 0, 4, 1, "IMAGE"],
+    [3, 1, 0, 5, 1, "IMAGE"],
+    [4, 2, 0, 3, 0, "PIXEL3DMM_MODEL"],
+    [5, 2, 0, 4, 0, "PIXEL3DMM_MODEL"],
+    [6, 2, 0, 5, 0, "PIXEL3DMM_MODEL"],
+    [7, 2, 0, 6, 0, "PIXEL3DMM_MODEL"],
+    [8, 3, 0, 7, 0, "IMAGE"],
+    [9, 3, 1, 6, 2, "FLAME_PARAMS"],
+    [10, 4, 1, 6, 3, "UV_COORDS"],
+    [11, 5, 1, 6, 4, "NORMALS"],
+    [12, 6, 1, 8, 0, "MESH_DATA"]
+  ],
+  "groups": [
+    {
+      "title": "Input Processing",
+      "bounding": [25, 25, 365, 600],
+      "color": "#3f789e"
+    },
+    {
+      "title": "Feature Extraction",
+      "bounding": [375, 25, 365, 850],
+      "color": "#a1309b"
+    },
+    {
+      "title": "Optimization & Export",
+      "bounding": [725, 25, 715, 650],
+      "color": "#b58b2a"
+    }
+  ],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}
