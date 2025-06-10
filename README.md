@@ -9,7 +9,7 @@
 
 Transform 2D face images into detailed 3D models with state-of-the-art neural networks, FLAME parametric models, and advanced optimization techniques.
 
-![Pixel3DMM Pipeline](docs/images/pipeline_overview.png)
+![Pixel3DMM Pipeline]((https://github.com/A043-studios/comfyui-pixel3dmm/blob/15ce8b5ebf46c118bcfb4290c88e16927e6fbcc0/examples/banner.gif))
 
 ## 🌟 Features
 
